@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "aoc2021"
+version = "0.1.0"
+description = ""
+authors = ["satrya"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+numpy = "^1.23.3"
+jupyterlab = "^3.4.7"
+
+[tool.poetry.group.dev.dependencies]
+numpy = "^1.23.3"
+jupyter = "lab"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
