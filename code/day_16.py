@@ -114,9 +114,21 @@ def runner(proc_str: str):
     running = True
 
     while running:
-        # if stack[-1]["processed"] == stack[-1]["count"]:
-        # pop it
-        # update parent continue
+        if len(stack) != 0 and stack[-1]["processed"] == stack[-1]["count"]:
+            done_node = stack.pop()
+
+            # stop if stack has reached zero
+            if len(stack) == 0:
+                break
+
+            # update parent continue
+            stack[-1]["total_bits"] += done_node["total_bits"]
+            if stack[-1]["type"] == "bits":
+                stack[-1]["processed"] += done_node["total_bits"]
+            else:
+                stack[-1]["processed"] += 1  # subpack
+            
+            continue
 
         packet_version = bintodec(proc_str[:3])
         type_version = bintodec(proc_str[3:6])
@@ -142,11 +154,10 @@ def runner(proc_str: str):
                 # update parent when child is finished
                 if stack[-1]["type"] == "bits":
                     stack[-1]["processed"] += done["total_bits"]
+                    stack[-1]["total_bits"] += done["total_bits"]
                 else:
                     stack[-1]["processed"] += 1  # subpacks
-                
-                # update parent total bits
-                stack[-1]["total_bits"] += done
+                    stack[-1]["total_bits"] += done["total_bits"]
             
             # return remaining proc
             proc_str = proc_str[package_bits:]
@@ -184,6 +195,7 @@ def runner(proc_str: str):
     
 
 if __name__ == '__main__':
+    ex1 = hextobin('8A004A801A8002F478')
     ex2 = hextobin('620080001611562C8802118E34')
-    runner(ex2)
+    runner(ex1)
 
