@@ -197,5 +197,7 @@ def runner(proc_str: str):
 if __name__ == '__main__':
     ex1 = hextobin('8A004A801A8002F478')
     ex2 = hextobin('620080001611562C8802118E34')
-    runner(ex1)
+    ex3 = hextobin('C0015000016115A2E0802F182340')
+    ex4 = hextobin('A0016C880162017C3686B18A3D4780')
+    runner(ex4)
 
