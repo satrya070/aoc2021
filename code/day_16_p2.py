@@ -95,18 +95,6 @@ def runner(proc_str: str):
 
             # update bits count
             stack[-1]["total_bits"] += package_bits
-
-            # current node processing is done # TODO check ifnessecary
-            if stack[-1]["processed"] == stack[-1]["count"]:
-                done = stack.pop()
-
-                # update parent when child is finished
-                if stack[-1]["type"] == "bits":
-                    stack[-1]["processed"] += done["total_bits"]
-                    stack[-1]["total_bits"] += done["total_bits"]
-                else:
-                    stack[-1]["processed"] += 1  # subpacks
-                    stack[-1]["total_bits"] += done["total_bits"]
             
             # return remaining proc
             proc_str = proc_str[package_bits:]
@@ -124,7 +112,9 @@ def runner(proc_str: str):
                 "count": bits,
                 "processed": 0,
                 "total_bits": 22
+                #"subpacket_values"
                 # TODO subpacket_values, type_id
+
             })
 
             # return remaining
