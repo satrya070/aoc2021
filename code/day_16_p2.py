@@ -50,6 +50,21 @@ def group_counter(groups):
     return total_groups
 
 
+def group_processor(groupstr):
+    total_value = ''
+    len_groups = 0
+    
+    for i in range(0, len(groupstr), 5):
+        group_start = i + 1
+        group_indexes = i + 5
+        value = groupstr[group_start: group_indexes]
+        total_value += value
+        len_groups += 1
+
+        if groupstr[i] == '0':
+            return bintodec(total_value), len_groups
+
+
 def runner(proc_str: str):
     version_sum = 0
     stack = []
@@ -65,8 +80,7 @@ def runner(proc_str: str):
                 break
 
             # TODO process subpackets according to type_id (packet_value)
-            # TODO update/add to parent subpack_values 
-
+            # TODO update/add to parent subpack_values
 
             # update parent continue
             stack[-1]["total_bits"] += done_node["total_bits"]
@@ -82,8 +96,9 @@ def runner(proc_str: str):
 
         # if literal
         if type_version == 4:
-            len_groups = group_counter(proc_str[6:])
+            #len_groups = group_counter(proc_str[6:])
             # TODO get actual packet value
+            packet_value, len_groups = group_processor(proc_str[6:])
             package_bits = 6 + (len_groups * 5)  # TODO process forreal
             version_sum += packet_version
 
@@ -95,6 +110,9 @@ def runner(proc_str: str):
 
             # update bits count
             stack[-1]["total_bits"] += package_bits
+
+            # update subpacket values
+            stack[-1]["subpack_values"].append(packet_value)
             
             # return remaining proc
             proc_str = proc_str[package_bits:]
@@ -106,13 +124,14 @@ def runner(proc_str: str):
         if length_type == '0':
             # operator_type 0 flow
             bits = bintodec(proc_str[7:22])
-            version_sum += packet_version  # TODO replace with proc_packets(type,)
+            version_sum += packet_version
             stack.append({
                 "type": "bits",
                 "count": bits,
                 "processed": 0,
-                "total_bits": 22
-                #"subpacket_values"
+                "total_bits": 22,
+                "type_version": type_version,
+                "subpack_values": []
                 # TODO subpacket_values, type_id
 
             })
@@ -123,12 +142,14 @@ def runner(proc_str: str):
         else:
             # operator_type 1 flow
             subpacks = bintodec(proc_str[7:18])
-            version_sum += packet_version  # TODO replace with proc_packets(type,)
+            version_sum += packet_version
             stack.append({
                 "type": "subpacks",
                 "count": subpacks,
                 "processed": 0,
-                "total_bits": 18
+                "total_bits": 18,
+                "type_version": type_version,
+                "subpack_values": []
                 # TODO subpacket_values, type_id
             })
 
