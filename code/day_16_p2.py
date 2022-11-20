@@ -1,3 +1,4 @@
+from math import prod
 
 hexmap = {
     '0': '0000',
@@ -66,10 +67,38 @@ def group_processor(groupstr):
 
 
 def node_processor(type_version, subpack_values):
+    """ always will return one number """
     if type_version == 0:
         # sum flow
-        processed_value = sum(subpack_values)
-        return processed_value
+        return sum(subpack_values)
+    elif type_version == 1:
+        # product flow
+        return prod(subpack_values)
+    elif type_version == 2:
+        # min flow
+        return min(subpack_values)
+    elif type_version == 3:
+        # max flow
+        return max(subpack_values)
+    elif type_version == 5:
+        # (first) greater than
+        if subpack_values[0] > subpack_values[1]:
+            return 1
+        else:
+            return 0
+    elif type_version == 6:
+        # (first) lesser than
+        if subpack_values[0] < subpack_values[1]:
+            return 1
+        else:
+            return 0
+    else:
+        # handle 7, equal flow
+        if subpack_values[0] == subpack_values[1]:
+            return 1
+        else:
+            return 0
+
 
 
 def runner(proc_str: str):
@@ -181,7 +210,14 @@ if __name__ == '__main__':
 
     # part 2
     ex1 = hextobin('C200B40A82')
-    value, stack = runner(ex1)
+    ex2 = hextobin('04005AC33890')
+    ex3 = hextobin('880086C3E88112')
+    ex4 = hextobin('CE00C43D881120')
+    ex5 = hextobin('D8005AC2A8F0')
+    ex6 = hextobin('F600BC2D8F')
+    ex7 = hextobin('9C005AC2F8F0')
+    ex8 = hextobin('9C0141080250320F1802104A08')
+    value, stack = runner(ex8)
 
     print(value, stack)
 
