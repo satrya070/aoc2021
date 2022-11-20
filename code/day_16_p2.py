@@ -217,7 +217,7 @@ if __name__ == '__main__':
     ex6 = hextobin('F600BC2D8F')
     ex7 = hextobin('9C005AC2F8F0')
     ex8 = hextobin('9C0141080250320F1802104A08')
-    value, stack = runner(ex8)
+    value, stack = runner(real)
 
     print(value, stack)
 
